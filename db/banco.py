@@ -1,6 +1,6 @@
 import sqlite3
 
-connection = sqlite3.connect("rbc_planetas.db")
+connection = sqlite3.connect('../db/rbc_planetas.db')
 c = connection.cursor()
 #SQL
 def create_table():
