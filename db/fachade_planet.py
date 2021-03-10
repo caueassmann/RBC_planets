@@ -1,4 +1,8 @@
+import sys
+sys.path.append('../src/')
+import insere_caso
 import banco
+
 print("inserir, ler, deletar, alterar")
 frase = input("Digite a função que deseja:")
 
