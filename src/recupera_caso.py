@@ -11,8 +11,9 @@ def recuperaHZD(HZD,planetas):
 			if caso[4] != 1:
 				planetas.remove(caso)
 		return planetas
+
 def recuperaPClass(pClass, planetas):
-	if pClass >3 or pClass<1:
+	if pClass >3 or pClass <1:
 		return  NAO
 	else:
 		for caso in planetas:
@@ -21,6 +22,20 @@ def recuperaPClass(pClass, planetas):
 				planetas.remove(caso)
 		return planetas
 
+def recuperaHZA(HZA, planetas):
+	planetas_HZA = []
+	for caso in planetas:
+		if abs(HZA - caso[6]) <= 0.2 and (caso[6] > -1 or caso[6] <1):
+			planetas_HZA.append(caso)
+	if not planetas_HZA:
+		for caso in planetas:
+			if abs(HZA - caso[6]) <= 0.6 and (caso[6] > -1 or caso[6] <1):
+				planetas_HZA.append(caso)
+		if not planetas_HZA:
+			return NAO
+			
+	planetas_HZA = sorted(planetas_HZA, key= 7)
+	return planetas_HZA
 
 def recupera_caso(array):
 	planetas = banco.data_read()
@@ -36,8 +51,8 @@ def recupera_caso(array):
 		print(planetas)
 		print("FIM DO PROCESSO-2")
 	else:
+		planetas = recuperaHZA(array[5], planetas)
 		print(planetas)
-		print("continua...")
 
 
 array = ["KOI-3010.01", 0.84, 0.63, 1,-0.16,-0.06,2]
