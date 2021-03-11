@@ -41,7 +41,7 @@ def delete_data(param, value):
 	print("planeta deletado")
 
 def data_update(nome, ESI, SPH, HZD, HZC, HZA, pClass, habitalidade, id):
-	sql = "UPDATE'planeta' SET nome = ? ESI = ?, SPH = ?, HZD = ?, HZC = ?, HZA = ?, pClass = ?, habitalidade = ? WHERE id = ?"
+	sql = "UPDATE'planeta' SET nome = ?, ESI = ?, SPH = ?, HZD = ?, HZC = ?, HZA = ?, pClass = ?, habitalidade = ? WHERE id = ?"
 	data = (nome, ESI, SPH, HZD, HZC, HZA, pClass, habitalidade, id)
 	c.execute(sql, data)
 	connection.commit()
