@@ -1,8 +1,14 @@
-#aqui vai ser posto o código para recuperação dos casos
 import sys
 sys.path.append('../db/')
 import banco
-NAO = "não é habitável"
+NAO = "nao e habitavel"
+def validar(planetas):
+	if type(planetas) != list:
+		print(planetas)
+		print("FIM DO PROCESSO")
+		sys.exit()
+	else:
+		return planetas 
 def recuperaHZD(HZD,planetas):
 	if HZD != 1:
 		return NAO
@@ -22,41 +28,54 @@ def recuperaPClass(pClass, planetas):
 				planetas.remove(caso)
 		return planetas
 
-def recuperaHZA(HZA, planetas):
+def recupera_HZA(HZA, planetas, pos):
 	planetas_HZA = []
 	for caso in planetas:
-		if abs(HZA - caso[6]) <= 0.2 and (caso[6] > -1 or caso[6] <1):
+		if abs(HZA - caso[pos]) <= 0.2 and (caso[pos] > -1 or caso[pos] <1):
 			planetas_HZA.append(caso)
 	if not planetas_HZA:
 		for caso in planetas:
-			if abs(HZA - caso[6]) <= 0.6 and (caso[6] > -1 or caso[6] <1):
+			if abs(HZA - caso[pos]) <= 0.6 and (caso[pos] > -1 or caso[pos] <1):
 				planetas_HZA.append(caso)
 		if not planetas_HZA:
 			return NAO
-			
-	planetas_HZA = sorted(planetas_HZA, key= 7)
 	return planetas_HZA
+
+def recupera_HZC(HZC, planetas):
+	planetas = recupera_HZA(HZC, planetas, 5) #eh o mesmo processo inicial portanto pode-se usar a funcao
+	planetas = validar(planetas)
+	for x in range(0,len(planetas)):
+		planetas[x] += (abs(HZC-planetas[x][5]),)
+	planetas = sorted(planetas, key= lambda planeta: planeta[-1])
+	return planetas
+
 
 def recupera_caso(array):
 	planetas = banco.data_read()
-	planetas =recuperaHZD(array[3], planetas)
-	if type(planetas) != list:
-		print(planetas)
-		print("FIM DO PROCESSO")
-		sys.exit()
-	else:
-		planetas = recuperaPClass(array[6],planetas)
 
-	if type(planetas) != list:
-		print(planetas)
-		print("FIM DO PROCESSO-2")
-	else:
-		planetas = recuperaHZA(array[5], planetas)
-		print(planetas)
+	planetas =recuperaHZD(array["HZD"], planetas)
+	planetas = validar(planetas)
+
+	planetas = recuperaPClass(array["pClass"],planetas)
+	planetas = validar(planetas)
+
+	planetas = recupera_HZA(array["HZA"], planetas, 6)
+	planetas = validar(planetas)
+
+	planetas = recupera_HZC(array["HZC"], planetas)
+	planetas = validar(planetas)
 
 
-array = ["KOI-3010.01", 0.84, 0.63, 1,-0.16,-0.06,2]
+	for planeta in planetas:
+		print(planeta)
+		print("=======================================")
+	
+
+array = [("nome","Kepler-62e"), ("ESI",0.83), ("SPH",0.96), 
+("HZD",1),("HZC",-0.15),("HZA",0.28),("pClass",3)]
+array = dict(array)
 recupera_caso(array)
+
 
 
 
