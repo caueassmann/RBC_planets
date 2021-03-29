@@ -1,6 +1,6 @@
 import sqlite3
 
-connection = sqlite3.connect('../db/rbc_planetas.db')
+connection = sqlite3.connect('db/rbc_planetas.db')
 c = connection.cursor()
 #SQL
 def create_table():
@@ -24,7 +24,6 @@ def data_insert(nome, ESI,SPH, HZD, HZC, HZA, pClass, habitalidade):
 	c.execute("INSERT INTO 'planeta' (nome, ESI, SPH, HZD, HZC, HZA, pClass, habitalidade) VALUES (?,?,?,?,?,?,?,?)", 
 		(nome, ESI, SPH, HZD, HZC, HZA, pClass, habitalidade))
 	connection.commit()
-	print("valores inseridos")
 	
 
 def data_read():

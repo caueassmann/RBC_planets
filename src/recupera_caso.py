@@ -1,16 +1,14 @@
 import sys
-sys.path.append('../db/')
+sys.path.append('db/')
 import banco
 # Constantes
-NAO = "nao e habitavel"
-SIM = "Habitavel"
+NAO = 0
+SIM = 1
 
 #######################
-def validar(planetas):
+def validar(planetas, valor):
 	if type(planetas) != list:
-		print(planetas)
-		print("FIM DO PROCESSO")
-		sys.exit()
+		return
 	else:
 		return planetas 
 
@@ -52,7 +50,8 @@ def recupera_HZA(HZA, planetas, pos):
 ########################################
 def recupera_HZC(HZC, planetas):
 	planetas = recupera_HZA(HZC, planetas, 5) #eh o mesmo processo inicial portanto pode-se usar a funcao
-	planetas = validar(planetas)
+	if type(planetas) != list:
+		return planetas
 	for x in range(0,len(planetas)):
 		planetas[x] += (abs(HZC-planetas[x][5]),)
 	planetas = sorted(planetas, key= lambda planeta: planeta[-1])
@@ -60,7 +59,7 @@ def recupera_HZC(HZC, planetas):
 	if tamanho>10:
 		filtro = len(planetas)%2
 	else:
-		filtro = 1
+		filtro = 0
 	for x in range(0,filtro):
 		planetas.remove(planetas[-1])
 	return planetas
@@ -84,20 +83,20 @@ def recupera_caso(array):
 	planetas = banco.data_read()#id,nome,ESI,SPH(vai ser tirado),HZD,HZC,HZA,pClass, habitalidade(int)
 	#filtragem
 	planetas =recuperaHZD(array["HZD"], planetas)
-	planetas = validar(planetas)
-
+	if type(planetas) != list:
+		return planetas
 	planetas = recuperaPClass(array["pClass"],planetas)
-	planetas = validar(planetas)
-
+	if type(planetas) != list:
+		return planetas
 	planetas = recupera_HZA(array["HZA"], planetas, 6)
-	planetas = validar(planetas)
-
+	if type(planetas) != list:
+		return planetas
 	planetas = recupera_HZC(array["HZC"], planetas)
-	planetas = validar(planetas)
-
+	if type(planetas) != list:
+		return planetas
 	planetas = recupera_ESI(array["ESI"], planetas)
-	planetas = validar(planetas)
-
+	if type(planetas) != list:
+		return planetas
 	#vizinho mais proximo
 	if len(planetas)>1:#caso seja uma lista
 		resultados = []
@@ -123,39 +122,28 @@ def recupera_caso(array):
 			else:
 				distancia_apv +=distancia[0]
 				aprovados.append(distancia)
-
 		#determinacao
 		if len(aprovados)>=len(rejeitados) and resultados[0][2] == 1:
-			print(SIM)
-			print(resultados)
+			resposta_absoluta = SIM
+		elif len(aprovados) == 0:
+			resposta_absoluta = NAO
 		elif resultados[0][2] == 0:
 			if resultados[0][0] < (distancia_apv/len(aprovados)):
-				print(NAO)
-				print(resultados)
+				resposta_absoluta = NAO
+				resposta_relativa = resultados
 			else:
-				print(SIM)
-				print(planetas)
+				resposta_absoluta = SIM
 		else:
 			if resultados[0][2] < (distancia_rej/len(rejeitados)):
-				print(SIM)
-				print(planetas)
+				resposta_absoluta = SIM
 			else:
-				print(NAO)
-				print(resultados)
+				resposta_absoluta = NAO
 	else:
 		if planetas[0][8] ==1:
-			print(SIM)
-			print(planetas)
+			resposta_absoluta = SIM
 		else:
-			print(NAO)
-			print(planetas)
-	
-array = [("nome","Kepler-62e"), ("ESI",0.8), ("SPH",0.96), 
-("HZD",1),("HZC",-0.6),("HZA",0.2),("pClass",2)]
-array = dict(array)
-recupera_caso(array)
-
-
-
+			resposta_absoluta = NAO
+		
+	return resposta_absoluta
 
 
