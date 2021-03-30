@@ -3,11 +3,12 @@ sys.path.append('../src/')
 import insere_caso
 import banco
 
+
 print("inserir, ler, deletar, alterar")
-frase = raw_input("Digite a funcao que deseja:")
+frase = input("Digite a funcao que deseja:")
 
 if frase == "inserir":
-	nome = raw_input("Digite o nome: ")
+	nome = input("Digite o nome: ")
 	ESI = input("Digite o ESI: ")
 	SPH = input("Digite o SPH: ")
 	HZD = input("Digite o HZD: ")
@@ -18,7 +19,6 @@ if frase == "inserir":
 	print(banco.data_insert(nome,ESI, SPH, HZD, HZC, HZA, pClass,habitalidade))
 
 elif frase == "ler":
-	id = input("Digite o id desejado: ")
 	print("ESI, SPH, HZD, HZC, HZA, pClass, habitalidade")
 	print(banco.data_read())
 
